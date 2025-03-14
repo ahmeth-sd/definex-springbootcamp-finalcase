@@ -2,6 +2,9 @@ package com.patikadev.finalcase.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -29,6 +32,11 @@ public class Project {
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @Setter
+    @Getter
+    @Column(nullable = false)
+    private boolean deleted = false;
 
     @PrePersist
     protected void onCreate() {

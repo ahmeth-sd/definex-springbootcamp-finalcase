@@ -2,6 +2,9 @@ package com.patikadev.finalcase.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -45,6 +48,11 @@ public class Task {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @Setter
+    @Getter
+    @Column(nullable = false)
+    private boolean deleted = false;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -66,9 +74,9 @@ public class Task {
     public enum State {
         BACKLOG,
         IN_ANALYSIS,
-        IN_PROGRESS,
         CANCELLED,
         BLOCKED,
+        IN_DEVELOPMENT,
         COMPLETED
     }
 }

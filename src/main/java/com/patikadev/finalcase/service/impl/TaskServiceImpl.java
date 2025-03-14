@@ -1,14 +1,17 @@
 package com.patikadev.finalcase.service.impl;
 
 import com.patikadev.finalcase.entity.Task;
+import com.patikadev.finalcase.entity.Users;
+import com.patikadev.finalcase.exception.InvalidTaskStateException;
 import com.patikadev.finalcase.exception.TaskNotFoundException;
+import com.patikadev.finalcase.exception.UnauthorizedException;
 import com.patikadev.finalcase.repository.TaskRepository;
 import com.patikadev.finalcase.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 @Service
@@ -39,9 +42,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task updateTask(Long id, Task taskDetails) {
+    public Task updateTask(Long id, Task taskDetails, Users user) {
         logger.info("Updating task with id: {}", id);
         Task task = getTaskById(id);
+        validateUserPermissions(task, user, taskDetails);
+        validateTaskStateChange(task, taskDetails);
         task.setTitle(taskDetails.getTitle());
         task.setDescription(taskDetails.getDescription());
         task.setAcceptanceCriteria(taskDetails.getAcceptanceCriteria());
@@ -56,6 +61,44 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteTask(Long id) {
         logger.info("Deleting task with id: {}", id);
-        taskRepository.deleteById(id);
+        Task task = getTaskById(id);
+        task.setDeleted(true);
+        taskRepository.save(task);
+    }
+
+    private void validateTaskStateChange(Task currentTask, Task newTask) {
+        if (currentTask.getState() == Task.State.COMPLETED) {
+            throw new InvalidTaskStateException("Completed tasks cannot be changed.");
+        }
+
+        if (newTask.getState() == Task.State.CANCELLED && newTask.getReason() == null) {
+            throw new InvalidTaskStateException("Cancellation reason must be provided.");
+        }
+
+        if (newTask.getState() == Task.State.BLOCKED && newTask.getReason() == null) {
+            throw new InvalidTaskStateException("Blocking reason must be provided.");
+        }
+
+        if (currentTask.getState() == Task.State.BACKLOG && newTask.getState() != Task.State.IN_ANALYSIS) {
+            throw new InvalidTaskStateException("Invalid state transition from Backlog.");
+        }
+
+        if (currentTask.getState() == Task.State.IN_ANALYSIS &&
+                (newTask.getState() != Task.State.IN_DEVELOPMENT && newTask.getState() != Task.State.BLOCKED)) {
+            throw new InvalidTaskStateException("Invalid state transition from In Analysis.");
+        }
+
+        if (currentTask.getState() == Task.State.IN_DEVELOPMENT &&
+                (newTask.getState() != Task.State.COMPLETED && newTask.getState() != Task.State.BLOCKED)) {
+            throw new InvalidTaskStateException("Invalid state transition from In Development.");
+        }
+    }
+
+    private void validateUserPermissions(Task task, Users user, Task taskDetails) {
+        if (!user.isTeamLeader() && !user.isProjectManager()) {
+            if (!task.getTitle().equals(taskDetails.getTitle()) || !task.getDescription().equals(taskDetails.getDescription())) {
+                throw new UnauthorizedException("Only Team Leader or Project Manager can change the title and description.");
+            }
+        }
     }
 }

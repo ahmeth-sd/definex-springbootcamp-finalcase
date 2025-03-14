@@ -41,6 +41,14 @@ public class Users {
         updatedAt = LocalDateTime.now();
     }
 
+    public boolean isTeamLeader() {
+        return Role.TEAM_LEADER.equals(role);
+    }
+
+    public boolean isProjectManager() {
+        return Role.PROJECT_MANAGER.equals(role);
+    }
+
     public enum Role {
         ADMIN,
         PROJECT_MANAGER,
