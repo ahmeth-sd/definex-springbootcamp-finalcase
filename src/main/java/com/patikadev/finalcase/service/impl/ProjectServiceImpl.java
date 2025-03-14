@@ -33,14 +33,12 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Transactional
     public Project createProject(Project project) {
         logger.info("Creating new project with title: {}", project.getTitle());
         return projectRepository.save(project);
     }
 
     @Override
-    @Transactional
     public Project updateProject(Long id, Project projectDetails) {
         logger.info("Updating project with id: {}", id);
         Project project = getProjectById(id);
@@ -52,7 +50,6 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Transactional
     public void deleteProject(Long id) {
         logger.info("Deleting project with id: {}", id);
         projectRepository.deleteById(id);

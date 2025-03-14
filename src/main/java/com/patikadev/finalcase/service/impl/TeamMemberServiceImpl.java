@@ -33,14 +33,12 @@ public class TeamMemberServiceImpl implements TeamMemberService {
     }
 
     @Override
-    @Transactional
     public TeamMember createTeamMember(TeamMember teamMember) {
         logger.info("Creating new team member with user id: {}", teamMember.getUser().getId());
         return teamMemberRepository.save(teamMember);
     }
 
     @Override
-    @Transactional
     public TeamMember updateTeamMember(Long id, TeamMember teamMemberDetails) {
         logger.info("Updating team member with id: {}", id);
         TeamMember teamMember = getTeamMemberById(id);
@@ -51,7 +49,6 @@ public class TeamMemberServiceImpl implements TeamMemberService {
     }
 
     @Override
-    @Transactional
     public void deleteTeamMember(Long id) {
         logger.info("Deleting team member with id: {}", id);
         teamMemberRepository.deleteById(id);

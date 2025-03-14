@@ -1,6 +1,6 @@
 package com.patikadev.finalcase.service.impl;
 
-import com.patikadev.finalcase.entity.User;
+import com.patikadev.finalcase.entity.Users;
 import com.patikadev.finalcase.exception.UserEmailNotFoundException;
 import com.patikadev.finalcase.exception.UserNotFoundException;
 import com.patikadev.finalcase.repository.UserRepository;
@@ -8,7 +8,7 @@ import com.patikadev.finalcase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,36 +23,35 @@ public class UserServiceImpl implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
-    public List<User> getAllUsers() {
+    public List<Users> getAllUsers() {
         logger.info("Fetching all users");
         return userRepository.findAll();
     }
 
     @Override
-    public User getUserById(Long id) {
+    public Users getUserById(Long id) {
         logger.info("Getting user by id: {}", id);
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public Users getUserByEmail(String email) {
         logger.info("Getting user by email: {}", email);
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserEmailNotFoundException(email));
     }
 
     @Override
-    public User createUser(User user) {
+    public Users createUser(Users user) {
         logger.info("Creating new user with email: {}", user.getEmail());
         return userRepository.save(user);
     }
 
     @Override
-    @Transactional
-    public User updateUser(Long id, User userDetails) {
+    public Users updateUser(Long id, Users userDetails) {
         logger.info("Updating user with id: {}", id);
-        User user = getUserById(id);
+        Users user = getUserById(id);
         user.setName(userDetails.getName());
         user.setEmail(userDetails.getEmail());
         return userRepository.save(user);

@@ -33,14 +33,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    @Transactional
     public Task createTask(Task task) {
         logger.info("Creating new task with title: {}", task.getTitle());
         return taskRepository.save(task);
     }
 
     @Override
-    @Transactional
     public Task updateTask(Long id, Task taskDetails) {
         logger.info("Updating task with id: {}", id);
         Task task = getTaskById(id);
@@ -56,7 +54,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    @Transactional
     public void deleteTask(Long id) {
         logger.info("Deleting task with id: {}", id);
         taskRepository.deleteById(id);

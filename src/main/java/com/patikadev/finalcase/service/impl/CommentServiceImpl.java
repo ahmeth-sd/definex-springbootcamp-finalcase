@@ -33,14 +33,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
     public Comment createComment(Comment comment) {
         logger.info("Creating new comment for task id: {}", comment.getTask().getId());
         return commentRepository.save(comment);
     }
 
     @Override
-    @Transactional
     public Comment updateComment(Long id, Comment commentDetails) {
         logger.info("Updating comment with id: {}", id);
         Comment comment = getCommentById(id);
@@ -49,7 +47,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
     public void deleteComment(Long id) {
         logger.info("Deleting comment with id: {}", id);
         commentRepository.deleteById(id);

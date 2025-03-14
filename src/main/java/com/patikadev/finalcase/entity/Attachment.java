@@ -1,13 +1,12 @@
 package com.patikadev.finalcase.entity;
 
-import com.patikadev.finalcase.entity.Task;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
 @Entity
-public class Attachments {
+public class Attachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
