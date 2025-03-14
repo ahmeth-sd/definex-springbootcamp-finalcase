@@ -17,7 +17,7 @@ public class TeamMember {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private Users user;
+    private User user;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

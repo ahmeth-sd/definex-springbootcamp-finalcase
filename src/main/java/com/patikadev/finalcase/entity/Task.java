@@ -33,7 +33,7 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "assignee_id", nullable = false)
-    private Users assignedUser;
+    private User assignedUser;
 
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
