@@ -22,6 +22,14 @@ public class Users {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String password;
 
+    @ManyToOne
+    @JoinColumn(name = "department_id", nullable = true)
+    private Department department;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.MEMBER;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -37,6 +45,11 @@ public class Users {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
+    }
+
+    public enum Role {
+        ADMIN,
+        MEMBER
     }
 
 }

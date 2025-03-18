@@ -1,14 +1,13 @@
 package com.patikadev.finalcase.controller;
 
 import com.patikadev.finalcase.entity.Project;
-import com.patikadev.finalcase.entity.TeamMember;
+import com.patikadev.finalcase.entity.Users;
 import com.patikadev.finalcase.service.ProjectService;
+import com.patikadev.finalcase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import java.util.List;
 
@@ -18,6 +17,9 @@ public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private UserService userService;
 
     @Operation(summary = "Get all projects")
     @GetMapping
@@ -42,22 +44,21 @@ public class ProjectController {
     @Operation(summary = "Update an existing project")
     @PutMapping("/{id}")
     public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project projectDetails) {
-        Project updatedProject = projectService.updateProject(id, projectDetails);
+        Users currentUser = getCurrentUser();
+        Project updatedProject = projectService.updateProject(id, projectDetails, currentUser);
         return ResponseEntity.ok(updatedProject);
     }
 
     @Operation(summary = "Delete a project by ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
-        projectService.deleteProject(id);
+        Users currentUser = getCurrentUser();
+        projectService.deleteProject(id, currentUser);
         return ResponseEntity.noContent().build();
     }
 
-
-    @Operation(summary = "Get members of a project by project ID")
-    @GetMapping("/{id}/members")
-    public ResponseEntity<List<TeamMember>> getProjectMembers(@PathVariable Long id) {
-        List<TeamMember> members = projectService.getProjectMembers(id);
-        return ResponseEntity.ok(members);
+    private Users getCurrentUser() {
+        // Implement this method to retrieve the current user from the security context or session
+        return userService.getUserByEmail("current_user_email@example.com"); // Replace with actual user retrieval logic
     }
 }
