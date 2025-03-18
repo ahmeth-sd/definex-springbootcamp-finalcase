@@ -1,8 +1,10 @@
 package com.patikadev.finalcase.service.impl;
 
 import com.patikadev.finalcase.entity.Project;
+import com.patikadev.finalcase.entity.TeamMember;
 import com.patikadev.finalcase.exception.ProjectNotFoundException;
 import com.patikadev.finalcase.repository.ProjectRepository;
+import com.patikadev.finalcase.repository.TeamMemberRepository;
 import com.patikadev.finalcase.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    private TeamMemberRepository teamMemberRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
 
@@ -55,5 +60,12 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = getProjectById(id);
         project.setDeleted(true);
         projectRepository.save(project);
+    }
+
+    @Override
+    public List<TeamMember> getProjectMembers(Long projectId) {
+        logger.info("Fetching members for project id: {}", projectId);
+        Project project = getProjectById(projectId);
+        return teamMemberRepository.findByProject(project);
     }
 }

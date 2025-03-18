@@ -44,9 +44,9 @@ public class TaskController {
 
     @Operation(summary = "Update an existing task")
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task taskDetails) {
+    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task taskDetails, @RequestParam Long projectId) {
         Users currentUser = getCurrentUser();
-        Task updatedTask = taskService.updateTask(id, taskDetails, currentUser);
+        Task updatedTask = taskService.updateTask(id, taskDetails, currentUser, projectId);
         return ResponseEntity.ok(updatedTask);
     }
 

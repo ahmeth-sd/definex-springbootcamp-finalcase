@@ -1,6 +1,7 @@
 package com.patikadev.finalcase.controller;
 
 import com.patikadev.finalcase.entity.Project;
+import com.patikadev.finalcase.entity.TeamMember;
 import com.patikadev.finalcase.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,5 +51,13 @@ public class ProjectController {
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
         projectService.deleteProject(id);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @Operation(summary = "Get members of a project by project ID")
+    @GetMapping("/{id}/members")
+    public ResponseEntity<List<TeamMember>> getProjectMembers(@PathVariable Long id) {
+        List<TeamMember> members = projectService.getProjectMembers(id);
+        return ResponseEntity.ok(members);
     }
 }

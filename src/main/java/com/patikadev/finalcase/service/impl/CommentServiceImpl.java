@@ -1,12 +1,12 @@
 package com.patikadev.finalcase.service.impl;
 
 import com.patikadev.finalcase.entity.Comment;
+import com.patikadev.finalcase.entity.Task;
 import com.patikadev.finalcase.exception.CommentNotFoundException;
 import com.patikadev.finalcase.repository.CommentRepository;
 import com.patikadev.finalcase.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;

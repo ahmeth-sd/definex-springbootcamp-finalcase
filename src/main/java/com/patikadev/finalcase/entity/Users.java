@@ -1,5 +1,7 @@
 package com.patikadev.finalcase.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -20,10 +22,6 @@ public class Users {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
-
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -41,18 +39,4 @@ public class Users {
         updatedAt = LocalDateTime.now();
     }
 
-    public boolean isTeamLeader() {
-        return Role.TEAM_LEADER.equals(role);
-    }
-
-    public boolean isProjectManager() {
-        return Role.PROJECT_MANAGER.equals(role);
-    }
-
-    public enum Role {
-        ADMIN,
-        PROJECT_MANAGER,
-        TEAM_LEADER,
-        MEMBER
-    }
 }
