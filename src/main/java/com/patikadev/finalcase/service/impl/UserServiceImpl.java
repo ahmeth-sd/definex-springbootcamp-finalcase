@@ -6,6 +6,7 @@ import com.patikadev.finalcase.exception.UserNotFoundException;
 import com.patikadev.finalcase.repository.UserRepository;
 import com.patikadev.finalcase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -19,6 +20,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -45,6 +49,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Users createUser(Users user) {
         logger.info("Creating new user with email: {}", user.getEmail());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
