@@ -1,5 +1,6 @@
 package com.patikadev.finalcase.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -9,8 +10,8 @@ import java.util.UUID;
 @Entity
 public class Department {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(length = 255, nullable = false)
     private String name;

@@ -53,7 +53,6 @@ public class ProjectServiceImpl implements ProjectService {
         validateUserPermissions(user, project);
         project.setTitle(projectDetails.getTitle());
         project.setDescription(projectDetails.getDescription());
-        project.setDepartment(projectDetails.getDepartment());
         project.setStatus(projectDetails.getStatus());
         return projectRepository.save(project);
     }

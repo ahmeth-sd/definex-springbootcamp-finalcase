@@ -20,10 +20,6 @@ public class Project {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "department_id", nullable = true)
-    private Department department;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;

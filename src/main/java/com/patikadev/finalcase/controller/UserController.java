@@ -37,16 +37,6 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @Operation(summary = "Create a new user")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid input")
-    })
-    @PostMapping
-    public Users createUser(@RequestBody Users user) {
-        return userService.createUser(user);
-    }
-
     @Operation(summary = "Update an existing user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User updated successfully"),
