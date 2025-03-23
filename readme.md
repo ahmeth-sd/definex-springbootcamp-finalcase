@@ -110,5 +110,10 @@ http://localhost:8080/swagger-ui/index.html
 4. Push to the branch (`git push origin feature-xyz`)
 5. Open a pull request
 
+
+ ## UML Diyagramı
+ 
+ ![UML Diyagramı](uml_diagram.png)
+ 
 ## License
 This project is licensed under the MIT License.
