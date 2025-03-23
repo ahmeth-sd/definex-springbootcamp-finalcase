@@ -349,4 +349,37 @@ class TaskServiceImplTest {
 
         assertThrows(InvalidTaskStateException.class, () -> taskService.updateTask(1L, newTask, teamMember, 1L));
     }
+
+    @Test
+    void testValidateTaskStateChange_InvalidTransition() {
+        task.setState(Task.State.BACKLOG);
+        when(taskRepository.findById(anyLong())).thenReturn(Optional.of(task));
+        when(teamMemberRepository.findByProjectIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(teamLeaderEntity));
+        Task newTask = new Task();
+        newTask.setState(Task.State.COMPLETED);
+
+        assertThrows(InvalidTaskStateException.class, () -> taskService.updateTask(1L, newTask, teamLeader, 1L));
+    }
+
+    @Test
+    void testValidateUserPermissions_NotMember() {
+        when(taskRepository.findById(anyLong())).thenReturn(Optional.of(task));
+        when(teamMemberRepository.findByProjectIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.empty());
+
+        Task newTask = new Task();
+        newTask.setTitle("New Title");
+
+        assertThrows(UnauthorizedException.class, () -> taskService.updateTask(1L, newTask, teamMember, 1L));
+    }
+
+    @Test
+    void testValidateUserPermissions_NotAuthorized() {
+        when(taskRepository.findById(anyLong())).thenReturn(Optional.of(task));
+        when(teamMemberRepository.findByProjectIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(teamMemberEntity));
+
+        Task newTask = new Task();
+        newTask.setTitle("New Title");
+
+        assertThrows(UnauthorizedException.class, () -> taskService.updateTask(1L, newTask, teamMember, 1L));
+    }
 }
