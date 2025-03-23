@@ -23,28 +23,23 @@ public class JwtUtil {
                 .compact();
     }
 
-    // Token'dan kullanıcı adını çıkar
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // Token süresi dolmuş mu?
     public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    // Token geçerli mi?
     public boolean validateToken(String token) {
         return (extractUsername(token) != null && !isTokenExpired(token));
     }
 
-    // Token'dan expiration bilgisini al
-    private Date extractExpiration(String token) {
+    public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    // Token'dan bir claim bilgisi çek
-    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
         return claimsResolver.apply(claims);
     }

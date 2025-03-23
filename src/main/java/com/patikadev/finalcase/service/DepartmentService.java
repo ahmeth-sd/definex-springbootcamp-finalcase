@@ -6,10 +6,10 @@ import java.util.UUID;
 
 public interface DepartmentService {
     List<Department> getAllDepartments();
-    Department getDepartmentById(UUID id);
+    Department getDepartmentById(Long id);
     Department createDepartment(Department department);
-    Department updateDepartment(UUID id, Department department);
-    void deleteDepartment(UUID id);
-    void assignUserToDepartmentByEmail(UUID departmentId, String email);
+    Department updateDepartment(Long id, Department department);
+    void deleteDepartment(Long id);
+    void assignUserToDepartmentByEmail(Long departmentId, String email);
 
 }

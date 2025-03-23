@@ -1,6 +1,8 @@
 package com.patikadev.finalcase.service;
 
 import com.patikadev.finalcase.entity.Users;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 

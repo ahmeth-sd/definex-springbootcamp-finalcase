@@ -9,7 +9,6 @@ import com.patikadev.finalcase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +31,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Department getDepartmentById(UUID id) {
+    public Department getDepartmentById(Long id) {
         logger.info("Getting department by id: {}", id);
         return departmentRepository.findById(id)
                 .orElseThrow(() -> new DepartmentNotFoundException(id));
@@ -45,7 +44,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Department updateDepartment(UUID id, Department departmentDetails) {
+    public Department updateDepartment(Long id, Department departmentDetails) {
         logger.info("Updating department with id: {}", id);
         Department department = getDepartmentById(id);
         department.setName(departmentDetails.getName());
@@ -54,13 +53,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public void deleteDepartment(UUID id) {
+    public void deleteDepartment(Long id) {
         logger.info("Deleting department with id: {}", id);
         departmentRepository.deleteById(id);
     }
 
     @Override
-    public void assignUserToDepartmentByEmail(UUID departmentId, String email) {
+    public void assignUserToDepartmentByEmail(Long departmentId, String email) {
         logger.info("Assigning user with email: {} to department with id: {}", email, departmentId);
         Department department = getDepartmentById(departmentId);
         Users user = userService.getUserByEmail(email);

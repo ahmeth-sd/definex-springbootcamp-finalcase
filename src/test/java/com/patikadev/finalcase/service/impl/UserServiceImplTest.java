@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,10 @@ class UserServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -83,12 +88,21 @@ class UserServiceImplTest {
 
     @Test
     void testCreateUser() {
-        when(userRepository.save(any(Users.class))).thenReturn(user);
+        Users newUser = new Users();
+        newUser.setName("Jane Doe");
+        newUser.setEmail("jane.doe@example.com");
+        newUser.setPassword("password123");
 
-        var result = userService.createUser(user);
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+        when(userRepository.save(any(Users.class))).thenReturn(newUser);
+
+        var result = userService.createUser(newUser);
         assertNotNull(result);
-        assertEquals("John Doe", result.getName());
-        verify(userRepository, times(1)).save(user);
+        assertEquals("Jane Doe", result.getName());
+        assertEquals("jane.doe@example.com", result.getEmail());
+        assertEquals("encodedPassword", result.getPassword());
+        verify(passwordEncoder, times(1)).encode("password123");
+        verify(userRepository, times(1)).save(newUser);
     }
 
     @Test
