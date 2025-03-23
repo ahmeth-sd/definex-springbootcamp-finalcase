@@ -1,81 +1,114 @@
-Problem Definition
-Subject: Advanced Task Management
+# Advanced Task Management System
 
-Story: Lorem Ipsum corporation has decided to change its legacy task manager application. The current application become outdated, slow and does not meet the current requirements of the corporation anymore. After a serious alternative tool research, the company board decided to develop an Advanced Task Management application in-house. Your task as a Developer is to implement this application. In the next sections you can find some details about the application.
+## Introduction
+The Advanced Task Management System is a comprehensive project built using **Java Spring Boot** and **PostgreSQL**. It is designed to facilitate efficient project and task management, supporting user roles, team collaborations, and department-based access control. This system includes authentication, authorization, and a secure API for seamless interaction with a frontend or external integrations.
 
-Major Features:
-Project and task management: As project group manager, I shall be able to manage projects related to a department. Also I shall be able to manage tasks of a project.
+## Features
+- **User Authentication & Authorization** (JWT-based security)
+- **Role Management** (Admin, Project Manager, Team Leader, Member)
+- **Project Management** (CRUD operations on projects)
+- **Task Management** (Task creation, assignment, tracking)
+- **Team Member Association** (Users assigned to projects with different roles)
+- **Department-Based Organization** (Users belong to departments, projects assigned to departments)
+- **Comments & Attachments** (For collaboration on tasks)
+- **Swagger API Documentation** (For easy API testing)
 
-Team member assignment: As a team leader or project manager(in a deparment), I shall be able to assign team members to a task.
+## Technologies Used
+- **Backend**: Java Spring Boot
+- **Database**: PostgreSQL
+- **Security**: Spring Security, JWT
+- **API Documentation**: Swagger (Springdoc OpenAPI)
+- **Build Tool**: Maven
 
-Progress tracking: As a team leader or project manager, I should be able to track the progress of a task. The progress shall have states (Backlog, In Analysis, In Development/Progress, Cancelled, Blocked or Completed).
+## Database Schema (Simplified UML Representation)
 
-Priority management: As a team leader or project manager, I should be able to assign priorities with task as critical, high, medium and low.
+### Tables:
+- **Users**: Stores user details and roles
+- **Department**: Represents different organizational departments
+- **Project**: Projects under specific departments
+- **TeamMember**: Links users to projects with assigned roles
+- **Task**: Tasks related to projects
+- **Comment**: User comments on tasks
+- **Attachment**: File attachments for tasks
 
-File attachment support: As a team member (Project Manager, Team Leader or other Team Members), I shall be able to attach one or more files to a task. The files shall be stored on the disk.
+## Installation & Setup
+### Prerequisites
+- Java 21+
+- PostgreSQL installed and running
+- Maven installed
 
-Constraints
-While implementing state management task progression:
+### Setup Steps
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/your-repo/task-management.git
+   cd task-management
+   ```
+2. Configure `application.properties` (or `application.yml`):
+   ```properties
+   spring.datasource.url=jdbc:postgresql://localhost:5432/taskdb
+   spring.datasource.username=your_db_user
+   spring.datasource.password=your_db_password
+   spring.jpa.hibernate.ddl-auto=update
+   jwt.secret=your_secret_key
+   jwt.expiration=3600000
+   ```
+3. Build and Run:
+   ```sh
+   mvn clean install
+   mvn spring-boot:run
+   ```
 
-Happy Path: Backlog <=> In Analysis <=> In Development/Progress <=> Completed
+## API Documentation
+Once the application is running, you can access the Swagger UI at:
+```
+http://localhost:8080/swagger-ui/index.html
+```
 
-Cancel Path: In any state except Completed , the progress state can be assigned as Cancelled .
+### Authentication & Authorization
+- **Login**: `POST /api/auth/login` → Returns JWT token
+- **Use Token**: Add the token in the `Authorization` header in Swagger UI
+  ```
+  Authorization: Bearer your_token_here
+  ```
 
-Blocked Paths:
+### Key API Endpoints
+- **Users**
+  - `GET /api/users` - List all users
+  - `POST /api/users` - Create a new user
+- **Projects**
+  - `GET /api/projects` - List all projects
+  - `POST /api/projects` - Create a new project
+- **Tasks**
+  - `GET /api/tasks` - List all tasks
+  - `POST /api/tasks` - Create a new task
+- **Comments & Attachments**
+  - `POST /api/comments` - Add comments to tasks
+  - `POST /api/attachments` - Upload file attachments
 
-In Analysis ⇔ Blocked
+## Troubleshooting
+### Swagger UI not loading?
+- Ensure the `springdoc-openapi` dependency is included.
+- Check `http://localhost:8080/v3/api-docs` returns JSON.
 
-In Development/Progress <=> Blocked
+### Cannot resolve column 'department_id'?
+- Ensure the database is correctly migrated with Hibernate (`spring.jpa.hibernate.ddl-auto=update`).
 
-When the state of a Task is assigned as Cancelled or Blocked , a reason must be entered.
+### JWT Authentication Issues?
+- Ensure `jwt.secret` is properly configured in `application.properties`.
+- Debug by logging the token decoding process.
 
-Under no circumstances, a Task, which state is Completed , CANNOT be putback to any state.
+## Future Enhancements
+- Email notifications for task updates
+- WebSocket-based real-time updates
+- Improved UI with a frontend framework (React or Angular)
+- Role-based dashboards
 
-A team member (except Team Leader or Project Manager):
+## Contributing
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature-xyz`)
+3. Commit your changes (`git commit -m "Add new feature"`)
+4. Push to the branch (`git push origin feature-xyz`)
+5. Open a pull request
 
-shall NOT be able to change the description and title of a task.
-
-shall be able to change the attachments or state of the task.
-
-shall be able to add comments.
-
-At minimum a task shall be able provide information about:
-
-A user story description.
-
-An acceptance criteria.
-
-A state
-
-A priority
-
-A list of comments
-
-A list of attachments
-
-An assignee
-
-At minimum, a Project shall be able provide information about:
-
-Responsible Department's Name
-
-A status (In Progress, Cancelled or Completed)
-
-A title
-
-A description
-
-A list of team members working on the project
-
-All DELETE operations are passive meaning records cannot be deleted from the storage.
-
-Unit tests is expected to be implemented.
-
-According to the corporation's quality standard, code coverage shall meet %80 of the code.
-
-The backend of the application shall be implemented with Java 21 and Spring Boot 3.
-
-Not: Further information about frontend part will be announced later.
-
-Good Luck!
-
+## License
+This project is licensed under the MIT License.
