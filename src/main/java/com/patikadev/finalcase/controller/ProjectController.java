@@ -57,7 +57,7 @@ public class ProjectController {
         return ResponseEntity.noContent().build();
     }
 
-    private Users getCurrentUser() {
+    protected Users getCurrentUser() {
         // Implement this method to retrieve the current user from the security context or session
         return userService.getUserByEmail("current_user_email@example.com"); // Replace with actual user retrieval logic
     }
