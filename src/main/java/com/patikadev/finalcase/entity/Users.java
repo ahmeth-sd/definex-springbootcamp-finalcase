@@ -23,8 +23,7 @@ public class Users {
     private String password;
 
     @ManyToOne
-    @JoinColumn(name = "department_id", nullable = true)
-    @JsonIgnore
+    @JoinColumn(name = "department_id", referencedColumnName = "id", nullable = true)
     private Department department;
 
     @Enumerated(EnumType.STRING)

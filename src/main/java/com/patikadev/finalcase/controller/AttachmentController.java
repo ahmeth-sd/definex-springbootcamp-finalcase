@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -50,5 +51,13 @@ public class AttachmentController {
     public ResponseEntity<Void> deleteAttachment(@PathVariable Long id) {
         attachmentService.deleteAttachment(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Upload a file")
+    @PostMapping("/upload")
+    public ResponseEntity<Attachment> uploadFile(@RequestParam("taskId") Long taskId,
+                                                 @RequestParam("file") MultipartFile file) {
+        Attachment attachment = attachmentService.uploadFile(taskId, file);
+        return ResponseEntity.ok(attachment);
     }
 }

@@ -1,7 +1,9 @@
 package com.patikadev.finalcase.controller;
 
+import com.patikadev.finalcase.entity.Department;
 import com.patikadev.finalcase.entity.Project;
 import com.patikadev.finalcase.entity.Users;
+import com.patikadev.finalcase.service.DepartmentService;
 import com.patikadev.finalcase.service.ProjectService;
 import com.patikadev.finalcase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class ProjectController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private DepartmentService departmentService;
+
     @Operation(summary = "Get all projects")
     @GetMapping
     public List<Project> getAllProjects() {
@@ -36,7 +41,9 @@ public class ProjectController {
 
     @Operation(summary = "Create a new project")
     @PostMapping
-    public ResponseEntity<Project> createProject(@RequestBody Project project) {
+    public ResponseEntity<Project> createProject(@RequestParam Long departmentId, @RequestBody Project project) {
+        Department department = departmentService.getDepartmentById(departmentId);
+        project.setDepartment(department);
         Project createdProject = projectService.createProject(project);
         return ResponseEntity.ok(createdProject);
     }

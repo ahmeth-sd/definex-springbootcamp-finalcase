@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -81,11 +80,4 @@ class DepartmentControllerTest {
         verify(departmentService, times(1)).deleteDepartment(1L);
     }
 
-    @Test
-    void testAssignUserToDepartmentByEmail() {
-        doNothing().when(departmentService).assignUserToDepartmentByEmail(1L, "test@example.com");
-
-        departmentController.assignUserToDepartmentByEmail(1L, "test@example.com");
-        verify(departmentService, times(1)).assignUserToDepartmentByEmail(1L, "test@example.com");
-    }
 }

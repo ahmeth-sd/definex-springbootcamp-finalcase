@@ -1,6 +1,8 @@
 package com.patikadev.finalcase.service;
 
 import com.patikadev.finalcase.entity.Attachment;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 public interface AttachmentService {
@@ -9,4 +11,6 @@ public interface AttachmentService {
     Attachment createAttachment(Attachment attachment);
     Attachment updateAttachment(Long id, Attachment attachmentDetails);
     void deleteAttachment(Long id);
+    Attachment uploadFile(Long taskId, MultipartFile file);
+
 }

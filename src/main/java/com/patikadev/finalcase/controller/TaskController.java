@@ -38,6 +38,10 @@ public class TaskController {
     @Operation(summary = "Create a new task")
     @PostMapping
     public ResponseEntity<Task> createTask(@RequestBody Task task) {
+        // Validate assignee_id
+        Users assignee = userService.getUserById(task.getAssignedUser().getId());
+        task.setAssignedUser(assignee);
+
         Task createdTask = taskService.createTask(task);
         return ResponseEntity.ok(createdTask);
     }

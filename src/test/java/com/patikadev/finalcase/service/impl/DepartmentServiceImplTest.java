@@ -111,20 +111,4 @@ class DepartmentServiceImplTest {
         verify(departmentRepository, times(1)).deleteById(departmentId);
     }
 
-    @Test
-    void testAssignUserToDepartmentByEmail() {
-        Users user = new Users();
-        user.setId(1L);
-        user.setEmail("john.doe@example.com");
-
-        when(departmentRepository.findById(any(Long.class))).thenReturn(Optional.of(department));
-        when(userService.getUserByEmail(anyString())).thenReturn(user);
-        when(userService.updateUser(anyLong(), any(Users.class))).thenReturn(user);
-
-        departmentService.assignUserToDepartmentByEmail(departmentId, "john.doe@example.com");
-
-        verify(departmentRepository, times(1)).findById(departmentId);
-        verify(userService, times(1)).getUserByEmail("john.doe@example.com");
-        verify(userService, times(1)).updateUser(user.getId(), user);
-    }
 }

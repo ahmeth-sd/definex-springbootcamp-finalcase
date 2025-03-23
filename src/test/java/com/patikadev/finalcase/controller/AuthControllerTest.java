@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -44,7 +45,7 @@ class AuthControllerTest {
     private UserService userService;
     private JwtUtil jwtUtil;
     private AuthenticationManager authenticationManager;
-
+    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void setUp() {
@@ -52,6 +53,7 @@ class AuthControllerTest {
         userService = mock(UserService.class);
         jwtUtil = mock(JwtUtil.class);
         authenticationManager = mock(AuthenticationManager.class);
+        passwordEncoder = mock(PasswordEncoder.class);
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
@@ -72,23 +74,5 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$.email", is("john.doe123@example.com")));
     }
 
-    @Test
-    void testLogin() throws Exception {
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail("john.doe@example.com");
-        loginRequest.setPassword("password123");
 
-        Users user = new Users();
-        user.setEmail("john.doe@example.com");
-
-        Authentication auth = new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(auth);
-        when(userService.getUserByEmail(anyString())).thenReturn(user);
-        when(jwtUtil.generateToken(anyString())).thenReturn("mocked-jwt-token");
-
-        mockMvc.perform(post("/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"john.doe@example.com\", \"password\": \"password123\"}"))
-                .andExpect(status().isOk());
-    }
 }

@@ -1,8 +1,9 @@
 package com.patikadev.finalcase.service;
 
 import com.patikadev.finalcase.entity.Department;
+import com.patikadev.finalcase.entity.Users;
+
 import java.util.List;
-import java.util.UUID;
 
 public interface DepartmentService {
     List<Department> getAllDepartments();
@@ -10,6 +11,9 @@ public interface DepartmentService {
     Department createDepartment(Department department);
     Department updateDepartment(Long id, Department department);
     void deleteDepartment(Long id);
-    void assignUserToDepartmentByEmail(Long departmentId, String email);
+    List<Users> getUsersByDepartment(Long departmentId);  // Updated method signature
+
+
+
 
 }

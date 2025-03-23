@@ -54,7 +54,9 @@ class TaskControllerTest {
     @Test
     void testCreateTask() {
         task.setId(1L); // Ensure the task has an ID
+        task.setAssignedUser(user); // Set the assigned user
         when(taskService.createTask(any(Task.class))).thenReturn(task);
+        when(userService.getUserById(anyLong())).thenReturn(user); // Mock user retrieval
 
         ResponseEntity<Task> result = taskController.createTask(task);
         assertNotNull(result);

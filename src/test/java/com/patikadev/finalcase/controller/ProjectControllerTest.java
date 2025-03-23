@@ -1,7 +1,9 @@
 package com.patikadev.finalcase.controller;
 
+import com.patikadev.finalcase.entity.Department;
 import com.patikadev.finalcase.entity.Project;
 import com.patikadev.finalcase.entity.Users;
+import com.patikadev.finalcase.service.DepartmentService;
 import com.patikadev.finalcase.service.ProjectService;
 import com.patikadev.finalcase.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,11 +26,16 @@ class ProjectControllerTest {
     @Mock
     private UserService userService;
 
+    @Mock
+    private DepartmentService departmentService;
+
     @InjectMocks
     private ProjectController projectController;
 
     private Project project;
     private Users user;
+    private Department department;
+
 
     @BeforeEach
     void setUp() {
@@ -41,6 +48,10 @@ class ProjectControllerTest {
         user = new Users();
         user.setId(1L);
         user.setEmail("test@example.com");
+
+        department = new Department();
+        department.setId(1L);
+        department.setName("Test Department");
     }
 
     @Test
@@ -65,11 +76,13 @@ class ProjectControllerTest {
 
     @Test
     void testCreateProject() {
+        when(departmentService.getDepartmentById(1L)).thenReturn(department);
         when(projectService.createProject(any(Project.class))).thenReturn(project);
 
-        ResponseEntity<Project> result = projectController.createProject(project);
+        ResponseEntity<Project> result = projectController.createProject(1L, project);
         assertNotNull(result);
         assertEquals(1L, result.getBody().getId());
+        verify(departmentService, times(1)).getDepartmentById(1L);
         verify(projectService, times(1)).createProject(any(Project.class));
     }
 

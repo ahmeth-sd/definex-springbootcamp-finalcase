@@ -1,6 +1,7 @@
 package com.patikadev.finalcase.controller;
 
 import com.patikadev.finalcase.entity.Department;
+import com.patikadev.finalcase.entity.Users;
 import com.patikadev.finalcase.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/departments")
@@ -47,9 +49,9 @@ public class DepartmentController {
         departmentService.deleteDepartment(id);
     }
 
-    @Operation(summary = "Assign a user to a department by email")
-    @PostMapping("/{id}/assign-user")
-    public void assignUserToDepartmentByEmail(@PathVariable Long id, @RequestParam String email) {
-        departmentService.assignUserToDepartmentByEmail(id, email);
+    @Operation(summary = "Get all users in a department by department ID")
+    @GetMapping("/{id}/users")
+    public List<Users> getUsersByDepartment(@PathVariable Long id) {
+        return departmentService.getUsersByDepartment(id);
     }
 }

@@ -9,9 +9,11 @@ import com.patikadev.finalcase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
@@ -19,12 +21,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;
 
-    @Autowired
-    private UserService userService;
 
     private static final Logger logger = LoggerFactory.getLogger(DepartmentServiceImpl.class);
 
     @Override
+    @Transactional
     public List<Department> getAllDepartments() {
         logger.info("Fetching all departments");
         return departmentRepository.findAll();
@@ -59,11 +60,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public void assignUserToDepartmentByEmail(Long departmentId, String email) {
-        logger.info("Assigning user with email: {} to department with id: {}", email, departmentId);
-        Department department = getDepartmentById(departmentId);
-        Users user = userService.getUserByEmail(email);
-        user.setDepartment(department);
-        userService.updateUser(user.getId(), user);
+    public List<Users> getUsersByDepartment(Long departmentId) {
+        Optional<Department> department = departmentRepository.findById(departmentId);
+        return department.map(Department::getUsers).orElse(null);
     }
+
+
+
 }

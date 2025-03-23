@@ -3,6 +3,7 @@ package com.patikadev.finalcase.controller;
 import com.patikadev.finalcase.entity.Users;
 import com.patikadev.finalcase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -49,12 +50,16 @@ public class UserController {
     }
 
     @Operation(summary = "Delete a user by ID")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "User deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "User not found")
-    })
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
+    }
+
+    @Operation(summary = "Set department for a specific user")
+    @PostMapping("/set-department-for-user")
+    public ResponseEntity<String> setDepartmentForUser(@RequestParam Long userId, @RequestParam Long departmentId) {
+        userService.setDepartmentForUser(userId, departmentId);
+        return ResponseEntity.ok("Department set for user successfully");
+
     }
 }

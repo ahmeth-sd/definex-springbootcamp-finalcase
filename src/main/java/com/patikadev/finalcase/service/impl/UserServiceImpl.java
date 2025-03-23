@@ -1,9 +1,11 @@
 package com.patikadev.finalcase.service.impl;
 
+import com.patikadev.finalcase.entity.Department;
 import com.patikadev.finalcase.entity.Users;
 import com.patikadev.finalcase.exception.UserEmailNotFoundException;
 import com.patikadev.finalcase.exception.UserNotFoundException;
 import com.patikadev.finalcase.repository.UserRepository;
+import com.patikadev.finalcase.service.DepartmentService;
 import com.patikadev.finalcase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +18,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -23,13 +26,17 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final DepartmentService departmentService;
+
+
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, DepartmentService departmentService) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.departmentService = departmentService;
     }
 
     @Override
@@ -72,6 +79,17 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Long id) {
         logger.info("Deleting user with id: {}", id);
         userRepository.deleteById(id);
+    }
+
+
+    @Override
+    @Transactional
+    public void setDepartmentForUser(Long userId, Long departmentId) {
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+        Department department = departmentService.getDepartmentById(departmentId);
+        user.setDepartment(department);
+        userRepository.save(user);
     }
 
 }
